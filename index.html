@@ -19,9 +19,11 @@
     <link href="assets/css/narrow-jumbotron.css" rel="stylesheet">
   </head>
 
-  <body>
+  <body onload="loadCount()">
 
     <div class="container">
+
+
               <div class="header clearfix">
                 <nav>
                   <ul class="nav nav-pills float-right">
@@ -37,7 +39,22 @@
               <h1 class="display-3">Reserve human friendly name for your address.</h1>
               <p class="lead">What's easy to remember a friendly name like JohnDoe or long address ?</p>
             </div>
+            <div class="content">
+              <div class="row">
 
+                <div class="col-md-12 logo">
+                    <h1 class="display-1">First 50 names are free. After that it will cost 0.1 NAS.</h1>
+                    Total Names Registed till now : <span id="rcount"> </span>
+                </div>
+                <!-- <div id=rcount class="col-md-6 blue">
+                </div> -->
+
+              </div>
+            </div>
+
+            <div id="missing-chrome-extension" class="alert alert-danger" role="alert">
+              Extension wallet is not installed, please install it first from here <a href="https://github.com/ChengOrangeJu/WebExtensionWallet"> Install Extension </a>
+            </div>
             <div class="block">
               <div class="row">
                 <div class="col-md-12">
@@ -225,11 +242,30 @@
 <script>
     var NebPay = require("nebpay");
     var nebPay = new NebPay();
-    var contract_address = "n1tpPTPDxzZc2nx5NfsZTirqTBbZMft9STK";
+    var contract_address = "n1xD5nS3FNhtsdCMXQvajSD1PgwJt44fKGW";
     //to check if the extension is installed
     //if the extension is installed, var "webExtensionWallet" will be injected in to web page
+    $('#missing-chrome-extension').hide()
     if(typeof(webExtensionWallet) === "undefined"){
         alert ("Extension wallet is not installed, please install it first.")
+        $('#missing-chrome-extension').show()
+    }
+
+    function loadCount() {
+        var callFunction = "registeredCount";
+        var callArgs = "";
+        nebPay.simulateCall(contract_address, 0, callFunction, callArgs, {
+            listener: loadCountCallback
+        });
+    }
+
+    function loadCountCallback(resp) {
+
+      console.log(resp['result'].length)
+      var tmp = (resp['result'].length == 3 ) ? resp['result'][1] : resp['result'].substr(1, resp['result'].length - 2)
+      tmp = resp['result'].substr(1, (resp['result'].length - 2))
+      console.log(tmp)
+      $('#rcount').text(parseInt(tmp, 10));
     }
 
     function onCheckAvailability() {
@@ -273,7 +309,7 @@
 
     function reserveName() {
         var name = $('#input-name').val();
-        var amount = "0.1";
+        var amount = (parseInt($("#rcount").val()) < 50 )? 0: "0.1";
         var callFunction = "reserveName";
         var callArgs = "[\"" + name.trim() + "\"]"; //in the form of ["args"]
         nebPay.call(contract_address, amount, callFunction, callArgs, {
