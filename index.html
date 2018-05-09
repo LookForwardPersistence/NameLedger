@@ -1,0 +1,318 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="NameLedger a unique name service for Nebulas ecosystem.">
+    <meta name="author" content="Shrikar Archak">
+
+
+    <title>NameLedger</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+
+    <!-- Custom styles for this template -->
+    <link href="assets/css/narrow-jumbotron.css" rel="stylesheet">
+  </head>
+
+  <body>
+
+    <div class="container">
+              <div class="header clearfix">
+                <nav>
+                  <ul class="nav nav-pills float-right">
+                    <li class="nav-item">
+                      <a class="nav-link" href="mailto:shrikar84@gmail.com">Contact</a>
+                    </li>
+                  </ul>
+                </nav>
+                <h3 class="logo">NameLedger</h3>
+              </div>
+
+            <div class="content">
+              <h1 class="display-3">Reserve human friendly name for your address.</h1>
+              <p class="lead">What's easy to remember a friendly name like JohnDoe or long address ?</p>
+            </div>
+
+            <div class="block">
+              <div class="row">
+                <div class="col-md-12">
+                  <h1 class="display-1">Step 1: Check for name availability</h1>
+                </div>
+              </div>
+              <div class="form-group row">
+                <div class="col-sm-8">
+                  <input type="text" class="form-control" id="nameledger-name-avail" placeholder="Enter the name you want to register.">
+                </div>
+              </div>
+              <div class="form-group row">
+                <div class="col-sm-4">
+                  <button type="submit" class="btn btn-primary" onclick="onCheckAvailability()">Check Availability</button>
+                </div>
+                <div class="col-sm-8">
+                  <div id='avail-result'></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="block">
+              <div class="row">
+                <div class="col-md-12">
+                  <h1 class="display-1">Step 2: Reserve name to be mapped to a your address</h1>
+                  We will mapping this name to the NAS address from which you are submitting the transaction.Will cost you 0.1 NAS(Think of it as buying domain)
+                </div>
+              </div>
+              <div class="form-group row">
+                <div class="col-sm-8">
+                  <input type="text" class="form-control" id="input-name" placeholder="john.doe">
+                </div>
+              </div>
+              <div class="form-group row">
+                <div class="col-sm-4">
+                  <button type="submit" onclick="reserveName()" class="btn btn-primary">Reserve Name</button>
+                </div>
+                <div class="col-sm-8">
+                  <div id='reserve-tx-hash'></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="block">
+              <div class="row">
+                <div class="col-md-12">
+                  <h1 class="display-1">Step 3: Once the transaction is complete. Check if the name is mapped to your address</h1>
+                </div>
+              </div>
+              <div class="form-group row">
+                <div class="col-sm-8">
+                  <input type="text" class="form-control" id="who-owns-name" placeholder="Enter the name you just registered">
+                </div>
+              </div>
+              <div class="form-group row">
+                <div class="col-sm-4">
+                  <button type="submit" class="btn btn-primary" onclick="nameToAddr()">Check Name Mapping</button>
+                </div>
+                <div class="col-sm-8">
+                  Mapped to address :
+                  <div id='who-owns-name-result'></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="block">
+              <div class="row">
+                <div class="col-md-12">
+                  <h1 class="display-1">Step 4: Check current bid for a name</h1>
+                </div>
+              </div>
+              <div class="form-group row">
+                <div class="col-sm-8">
+                  <input type="text" class="form-control" id="current-bid-name" placeholder="Enter the name for which you want to get the bid">
+                </div>
+              </div>
+              <div class="form-group row">
+                <div class="col-sm-4">
+                  <button type="submit" class="btn btn-primary" onclick="currentBid()">Check Current Bid</button>
+                </div>
+                <div class="col-sm-8">
+                  Current Bid :
+                  <div id='current-bid-result'></div>
+                </div>
+              </div>
+            </div>
+
+
+            <div class="block">
+              <div class="row">
+                <div class="col-md-12">
+                  <h1 class="display-1">Step 5: Set bid if you want to sell your NameLedger handle</h1>
+                </div>
+              </div>
+              <div class="form-group row">
+                <div class="col-sm-8">
+                  <label for="inputEmail4">Enter the name for which you want to set bid price.</label>
+                  <input type="text" class="form-control" id="set-bid-name" placeholder="john.doe">
+                </div>
+                <div class="col-sm-4">
+                  <label for="inputEmail4">Enter bid value in NAS.</label>
+                  <input type="text" class="form-control" id="set-bid-amount" placeholder="5">
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-4">
+                  <button type="submit" onclick="setBid()" class="btn btn-primary">Set Bid</button>
+                </div>
+                <div class="col-sm-8">
+                  <div id='set-bid-result'></div>
+                </div>
+              </div>
+            </div>
+
+
+            <div class="block">
+              <div class="content block">
+                <p class="lead">Lets say you want the name DappExperts but its taken. You can buy it from someone else (like a domain name) and get it mapped to your address.</p>
+              </div>
+            </div>
+
+            <ul>
+              <li> You can only buy the name if the person owning it is ready to sell.</li>
+              <li> We can check this by verifying the currentBid. If the person is not interested in selling you will get an error saying domain is not available for sale.</li>
+              <li> Get the current bid and pay a little more than that to transfer the ownership of the name to you.</li>
+            </ul>
+            <div class="block">
+              <div class="row">
+                <div class="col-md-12">
+                  <h1 class="display-1">Step 6: Transfer name ownership from some one else to you.</h1>
+                </div>
+              </div>
+              <div class="form-group row">
+                <div class="col-sm-8">
+                  <input type="text" class="form-control" id="input-name" placeholder="john.doe">
+                </div>
+              </div>
+              <div class="form-group row">
+                <div class="col-sm-4">
+                  <button type="submit" onclick="reserveName()" class="btn btn-primary">Reserve Name</button>
+                </div>
+                <div class="col-sm-8">
+                  <div id='reserve-tx-hash'></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="content">
+              <h1 class="display-3">How can people use this service?</h1>
+            </div>
+            <div>
+              <ul>
+                <li>Any app on nebulas platform which want to support name based payment can call this smartcontract to get the mapping from name to address. Doing this will increase the usability of your own apps.</li>
+                <li>Nebulas is here to stay and this service will become more useful in the long run</li>
+              </ul>
+            </div>
+
+            <div class="content">
+              <h1 class="display-3">Monetization on these names</h1>
+            </div>
+            <div>
+              <ul>
+                <li>Do you guys see the opportunity in hoarding the names and selling it later down the line</li>
+                <li>Most of the brands, keywords are ready to be grabbed. Reserve them before some one else does it.</li>
+              </ul>
+            </div>
+
+            <footer class="footer">
+              <p>&copy; NameLedger</p>
+            </footer>
+
+    </div>
+
+
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="assets/js/nebpay.js"></script>
+    <script src="assets/js/ie10-viewport-bug-workaround.js"></script>
+    <!-- <script src="assets/js/nameledger-common.js"></script> -->
+
+<script>
+    var NebPay = require("nebpay");
+    var nebPay = new NebPay();
+    var contract_address = "n1tpPTPDxzZc2nx5NfsZTirqTBbZMft9STK";
+    //to check if the extension is installed
+    //if the extension is installed, var "webExtensionWallet" will be injected in to web page
+    if(typeof(webExtensionWallet) === "undefined"){
+        alert ("Extension wallet is not installed, please install it first.")
+    }
+
+    function onCheckAvailability() {
+        var name = $('#nameledger-name-avail').val();
+        var callFunction = "available";
+        var callArgs = "[\"" + name.trim() + "\"]";
+        nebPay.simulateCall(contract_address, 0, callFunction, callArgs, {
+            listener: updateAvailResults
+        });
+    }
+
+    function updateAvailResults(resp) {
+      $('#avail-result').text(resp['result']);
+    }
+
+    function nameToAddr() {
+        var name = $('#who-owns-name').val();
+        var callFunction = "nameToAddr";
+        var callArgs = "[\"" + name.trim() + "\"]";
+        nebPay.simulateCall(contract_address, 0, callFunction, callArgs, {
+            listener: nameToAddrCallback
+        });
+    }
+
+    function nameToAddrCallback(resp) {
+      $('#who-owns-name-result').text(resp['result']);
+    }
+
+    function currentBid() {
+        var name = $('#current-bid-name').val();
+        var callFunction = "currentBid";
+        var callArgs = "[\"" + name.trim() + "\"]";
+        nebPay.simulateCall(contract_address, 0, callFunction, callArgs, {
+            listener: currentBidCallback
+        });
+    }
+
+    function currentBidCallback(resp) {
+      $('#current-bid-result').text(resp['result']);
+    }
+
+    function reserveName() {
+        var name = $('#input-name').val();
+        var amount = "0.1";
+        var callFunction = "reserveName";
+        var callArgs = "[\"" + name.trim() + "\"]"; //in the form of ["args"]
+        nebPay.call(contract_address, amount, callFunction, callArgs, {
+            listener: reserveNameDone
+        });
+    }
+    //callback function of onClickSendTx, to handle the transaction response
+    function reserveNameDone(resp){
+        $('#reserve-tx-hash').text(resp['result']);
+    }
+
+    function setBid() {
+        var name = $('#set-bid-name').val();
+        var amount = $('#set-bid-amount').val();
+        var callFunction = "setBid";
+        var callArgs = "[\"" + name.trim() + "\","+ amount + "]"; //in the form of ["args"]
+        nebPay.call(contract_address, 0, callFunction, callArgs, {
+            listener: setBidCallback
+        });
+    }
+    //callback function of onClickSendTx, to handle the transaction response
+    function setBidCallback(resp){
+        $('#set-bid-result').text(resp['result']);
+    }
+
+    function transferName() {
+        var name = $('#input-name').val();
+        var amount = $('#bid-amount').val();
+        var callFunction = "transferName";
+        var callArgs = "[\"" + name.trim() + "\"]"; //in the form of ["args"]
+        nebPay.call(contract_address, amount, callFunction, callArgs, {
+            listener: transferNameCallback
+        });
+    }
+    //callback function of onClickSendTx, to handle the transaction response
+    function transferNameCallback(resp){
+        $('#transfer-name-result').text(resp['result']);
+    }
+
+</script>
+  </body>
+</html>
