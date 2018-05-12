@@ -58,7 +58,15 @@
 
                 <div class="col-md-12 logo">
                     <h1 class="display-1">First 50 names are free. After that it will cost 0.1 NAS.</h1>
-                    Total Names Registered till now : <span id="rcount"> </span>
+                    <div class="row">
+                      <div class='col-md-4'>
+                        Total Names Registered till now :
+                      </div>
+                      <div class='col-md-1' id='rcount'>
+                      </div>
+
+                    </div>
+
                 </div>
                 <!-- <div id=rcount class="col-md-6 blue">
                 </div> -->
@@ -323,7 +331,7 @@
 
     function reserveName() {
         var name = $('#input-name').val();
-        var amount = (parseInt($("#rcount").val()) < 50 )? 0: "0.1";
+        var amount = (parseInt($('#rcount').text()) < 50 )? 0: "0.1";
         var callFunction = "reserveName";
         var callArgs = "[\"" + name.trim() + "\"]"; //in the form of ["args"]
         nebPay.call(contract_address, amount, callFunction, callArgs, {
