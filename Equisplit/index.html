@@ -275,7 +275,7 @@
     var NebPay = require("nebpay");
     var nebPay = new NebPay();
     var serialNumber;
-    var contract_address = "n1uViwhmn4v8oWB9EX7mY2bjWmDvAmeetaZ";
+    var contract_address = "n1sPbA7geWChfgCxiwaDXZtj1Ndef9UegJq";
     //to check if the extension is installed
     //if the extension is installed, var "webExtensionWallet" will be injected in to web page
     $('#missing-chrome-extension').hide()
@@ -298,7 +298,7 @@
 
     function createPartnership() {
       var name = $('#partnership_name.mailchimp-input').val()
-      var partners = $('#partners').val().split(',')
+      var partners = $('#partners').val().replace(/\s/g, '').split(',')
 
       var callFunction = "createPartnership";
       var callArgs = "[\"" + name.trim() +'\",'+JSON.stringify(partners)+ "]";

@@ -87,9 +87,10 @@ EquiSplit.prototype = {
     }
     var amountToSend = amount.dividedToIntegerBy(partners_count);
     this.partnersmap.get(lowername).forEach(function (addr) {
-      var result = Blockchain.transfer(addr, amountToSend);
+      var trimmed = addr.trim()
+      var result = Blockchain.transfer(trimmed, amountToSend);
         if (!result) {
-          throw new Error("transfer failed. " + addr + " amount " + amountToSend);
+          throw new Error("transfer failed for " + trimmed + " with amount " + amountToSend);
         }
     });
 
